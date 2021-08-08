@@ -1,0 +1,59 @@
+---
+title: "Covid Case"
+author: "Raka R.A Prasetyo"
+date: "6/14/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library("stringr")
+library("dplyr")
+library("readr")
+library("ggplot2")
+library(plyr)
+library(imputeTS)
+```
+
+```{r}
+covid <- read.csv("owid-covid-data.csv")
+
+covid
+```
+
+```{r}
+df <- covid %>% 
+  mutate(continent_miss = 
+           replace(continent, continent == "", "Africa"))
+
+df_fixed <- na_mean(df)
+```
+
+```{r}
+df_fixed
+```
+
+```{r}
+df_cov <- ddply(df_fixed, .(continent_miss), summarize,  new_cases_per_million = mean(new_cases_smoothed_per_million),human_development_index=mean(human_development_index))
+```
+
+```{r}
+df_cov
+```
+
+
+```{r}
+glimpse(covid)
+```
+
+#Does continent with higher Human Development Index means lower new covid cases per million?
+
+```{r}
+ggplot(df_cov, aes(x= new_cases_per_million, y= continent_miss, fill= human_development_index)) +
+    geom_bar(stat='identity', position='dodge') + labs(y = "Continent",x = "New Cases Per Million Avg", fill = "Human Development Index Avg")
+```
+
