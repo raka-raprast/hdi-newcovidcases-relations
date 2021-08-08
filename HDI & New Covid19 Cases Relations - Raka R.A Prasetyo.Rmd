@@ -1,5 +1,5 @@
 ---
-title: "Covid Case"
+title: "Human Development Index and New Covid19 Cases Relations"
 author: "Raka R.A Prasetyo"
 date: "6/14/2021"
 output: html_document
